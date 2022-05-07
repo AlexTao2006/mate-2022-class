@@ -1,0 +1,73 @@
+#include <Servo.h>
+
+Servo motL;
+Servo motR;
+Servo motU1;
+Servo motU2;
+Servo motU3;
+Servo motU4;
+Servo claw;
+
+int x = 0;
+int y = 0;
+int z = 0;
+
+void setup() {
+  claw.attach(6);
+  motL.attach(11);
+  motR.attach(7);
+  motU1.attach(8);
+  motU2.attach(9);
+  motU3.attach(12);
+  motU4.attach(10);
+  pinMode(A6, INPUT);
+  pinMode(A7, INPUT);
+  pinMode(A5, INPUT);
+  motL.writeMicroseconds(1500);
+  motR.writeMicroseconds(1500);
+  motU1.writeMicroseconds(1500);
+  motU2.writeMicroseconds(1500);
+  motU3.writeMicroseconds(1500);
+  motU4.writeMicroseconds(1500);
+  Serial.begin(9600);
+  delayMicroseconds(7000);
+}
+
+void loop() {
+  x = 512 - analogRead(A6);
+  y = 512 - analogRead(A7);
+  z = 512 - analogRead(A5);
+  
+  if(z > 1600 or z < 1400) {
+    motU1.writeMicroseconds(1500 + z);
+    motU2.writeMicroseconds(1500 + z);
+    motU3.writeMicroseconds(1500 + z);
+    motU4.writeMicroseconds(1500 + z);
+  }
+  else {
+    motU1.writeMicroseconds(1500);
+    motU2.writeMicroseconds(1500);
+    motU3.writeMicroseconds(1500);
+    motU4.writeMicroseconds(1500);
+  }
+  if(y > 50 or y < -50) {
+    motL.writeMicroseconds(1500 + y);
+    motR.writeMicroseconds(1500 + y);
+  }
+  else if(x > 50 or x < -50) {
+    motL.writeMicroseconds(1500 + x);
+    motR.writeMicroseconds(1500 + x);
+  }
+  else {
+    motL.writeMicroseconds(1500);
+    motR.writeMicroseconds(1500);
+  }
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print("  Y: ");
+  Serial.print(y);
+  Serial.print("  Z: ");
+  Serial.println(z);
+}
+
+ 
